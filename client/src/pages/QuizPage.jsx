@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-
 import "../styles/quizz.css";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useAuth } from "../services/useAuth";
@@ -34,7 +33,7 @@ function QuizPage() {
   const [score, setScore] = useState(0);
   const [timer, setTimer] = useState(10);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
+
   const [isCorrect, setIsCorrect] = useState(false);
   const navigate = useNavigate();
   const { auth } = useAuth();
@@ -83,7 +82,7 @@ function QuizPage() {
         body: JSON.stringify({
           userId: auth.id,
           questionId: questions[currentQuestion].id,
-          isCorrect: isAnswerCorrect,
+          isCorrect,
         }),
         credentials: "include",
       });
@@ -95,7 +94,6 @@ function QuizPage() {
   const handleNext = () => {
     if (currentQuestion < questions.length) {
       setShowAnswer(false);
-      setSelectedOption(null);
       setCurrentQuestion(currentQuestion + 1);
       setTimer(10);
     }

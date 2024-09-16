@@ -1,11 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import {
-  createBrowserRouter,
-  RouterProvider,
-  redirect,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import App from "./App";
 import Register, { action as registerAction } from "./pages/Register";
@@ -17,7 +13,7 @@ import QuizTest, { loader as quizTestLoader } from "./pages/QuizTest";
 import QuizPage, { loader as quizPageLoader } from "./pages/QuizPage";
 import QuizList, { loader as quizListLoader } from "./pages/QuizList";
 
-const checkAuth = async () => {
+/* const checkAuth = async () => {
   try {
     const res = await fetch(
       `${import.meta.env.VITE_API_URL}/api/verify-admin`,
@@ -31,8 +27,8 @@ const checkAuth = async () => {
     return false;
   }
 };
-
-function protectedRoute(routeConfig) {
+*/
+/* function protectedRoute(routeConfig) {
   return {
     ...routeConfig,
     loader: async (args) => {
@@ -49,6 +45,7 @@ function protectedRoute(routeConfig) {
     },
   };
 }
+  */
 
 const router = createBrowserRouter([
   {
