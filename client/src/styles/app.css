@@ -1,0 +1,12 @@
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  --primary-background: var(--primary-background) background-color: #e7a6fe;
+  background-image: linear-gradient(
+    64deg,
+    #e7a6fe 0%,
+    #acbcfb 19%,
+    #ec97d9 100%
+  );
+}

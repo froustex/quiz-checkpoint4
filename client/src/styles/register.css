@@ -1,0 +1,52 @@
+section {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid black;
+  align-items: center;
+}
+
+.hide {
+  display: none;
+}
+
+.valid {
+  color: green;
+}
+
+.invalid {
+  color: red;
+}
+
+.form-register {
+  display: flex;
+  flex-direction: column;
+  height: 70vh;
+  width: 70%;
+  gap: 2rem;
+  padding-top: 1rem;
+}
+
+.input-register {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 2rem;
+}
+
+.formInput {
+  background-color: #e4e1e1;
+}
+
+.isSubmiting {
+  align-self: center;
+  width: 50%;
+}
+
+.login-redirection {
+  align-self: center;
+}
+
+.instructions {
+  display: flex;
+  gap: 10px;
+}
