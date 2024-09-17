@@ -4,6 +4,25 @@ import "../styles/questionsList.css";
 
 function QuestionsList() {
   const [questions, setQuestions] = useState([]);
+  const [filterTheme, setFilterTheme] = useState("");
+  const [filterDiff, setFilterDiff] = useState("");
+
+  const handleThemeChange = (e) => {
+    setFilterTheme(e.target.value);
+  };
+
+  const handleDiffChange = (e) => {
+    setFilterDiff(e.target.value);
+  };
+
+  const arrayThemes = questions.flat().map((el) => el.theme);
+  const extractUniqueTheme = [...new Set(arrayThemes)];
+  const arrayDifficulty = questions.flat().map((el) => el.difficulty);
+  const extractUniqueDifficulty = [...new Set(arrayDifficulty)];
+
+  const filteredQuestions = questions
+    .filter((el) => (filterTheme ? el.theme === filterTheme : questions))
+    .filter((el) => (filterDiff ? el.difficulty === filterDiff : questions));
 
   const fetchQuestions = async () => {
     try {
@@ -29,16 +48,32 @@ function QuestionsList() {
   }, []);
 
   return (
-    <div className="questions-container">
-      <div className="tilte-questions">
-        <h2>Questions</h2>
+    <>
+      <div className="select-part">
+        <select onChange={handleThemeChange} value={filterTheme}>
+          <option value="">THEME</option>
+          {extractUniqueTheme.map((theme) => (
+            <option key={theme.id}>{theme}</option>
+          ))}
+        </select>
+        <select onChange={handleDiffChange} value={filterDiff}>
+          <option value="">DIFFICULTE</option>
+          {extractUniqueDifficulty.map((difficulty) => (
+            <option key={difficulty.id}>{difficulty}</option>
+          ))}
+        </select>
       </div>
-      <div className="question-part">
-        {questions.map((question) => (
-          <QuestionCard question={question} key={question.id} />
-        ))}
+      <div className="questions-container">
+        <div className="tilte-questions">
+          <h2>Questions</h2>
+        </div>
+        <div className="question-part">
+          {filteredQuestions.map((question) => (
+            <QuestionCard question={question} key={question.id} />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
