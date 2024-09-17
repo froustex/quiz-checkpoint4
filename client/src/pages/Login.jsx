@@ -60,7 +60,7 @@ function Login() {
       if (!actionData.isAdmin) {
         navigate("/quizlist", { replace: true });
       } else {
-        navigate("/quizlist", { replace: true });
+        navigate("/dashboard", { replace: true });
       }
     }
   }, [actionData, setAuth, navigate]);

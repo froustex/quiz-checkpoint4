@@ -1,0 +1,25 @@
+.user-card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 90vw;
+  font-size: 1.2rem;
+  margin: 2rem auto;
+}
+
+.user-card {
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(169, 158, 166);
+  padding: 1rem;
+  text-align: center;
+}
+
+@media screen and (min-width: 680px) {
+  .user-card-container {
+    font-size: 1.4rem;
+    flex-direction: row;
+  }
+}

@@ -24,7 +24,7 @@ function Header() {
         credentials: "include",
       });
       if (!res.ok) {
-        throw new Error("Couldn't log out");
+        throw new Error("Erreur de deconnexion");
       }
       navigate("/");
     } catch (err) {
@@ -73,7 +73,7 @@ function Header() {
           </div>
         )}
       </header>{" "}
-      {auth ? (
+      {auth && !auth.isAdmin ? (
         <div
           className={
             showActions
@@ -88,10 +88,10 @@ function Header() {
             mes résultats
           </button>
           <button type="button" onClick={handleShowModalAddQuestion}>
-            proposer une question
+            "Ajouter une question"
           </button>
           <button type="button" onClick={handleShowModalRate}>
-            Noter le jeu
+            "Noter le jeu"
           </button>
         </div>
       ) : (
@@ -104,7 +104,7 @@ function Header() {
             : `results-container-hidden`
         }
       >
-        <Results auth={auth} />
+        {auth.isAdmin ? "" : <Results auth={auth} />}
       </div>
       <div
         className={
@@ -113,7 +113,7 @@ function Header() {
             : `add-question-container-hidden`
         }
       >
-        <AddQuestion auth={auth} />
+        {auth.isAdmin ? "" : <AddQuestion auth={auth} />}
       </div>
       <div
         className={
@@ -122,7 +122,7 @@ function Header() {
             : `rate-container-hidden`
         }
       >
-        <Rate auth={auth} stars={5} />
+        {auth.isAdmin ? "" : <Rate auth={auth} stars={5} />}
       </div>
     </>
   );

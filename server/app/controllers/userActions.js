@@ -43,6 +43,21 @@ const readTotalAnswer = async (req, res, next) => {
   }
 };
 
+const editPercentageScore = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const successRate = await tables.user.readUserSuccessRate(userId);
+    const [result] = await tables.user.updateUserScore(userId, successRate);
+    if (result.affectedRows > 0) {
+      res.sendStatus(204);
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 const add = async (req, res, next) => {
   try {
     const userExists = await tables.user.readByEmail(req.body.email);
@@ -81,8 +96,8 @@ const addUserResult = async (req, res, next) => {
 
 const addRate = async (req, res, next) => {
   try {
-    const { rate } = req.body;
-    await tables.user.createRate(rate);
+    const { rate, id } = req.body;
+    await tables.user.createRate(rate, id);
     res.status(201).json({ message: "Votre note a été prise en compte" });
   } catch (err) {
     next(err);
@@ -103,6 +118,7 @@ module.exports = {
   read,
   readSuccess,
   readTotalAnswer,
+  editPercentageScore,
   add,
   addUserResult,
   addRate,

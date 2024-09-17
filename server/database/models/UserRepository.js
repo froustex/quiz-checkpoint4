@@ -21,17 +21,17 @@ class UserRepository extends AbstractRepository {
     return row;
   }
 
-  async createRate(rate) {
+  async createRate(rate, id) {
     const [result] = await this.database.query(
-      `update ${this.table} set rate = ?`,
-      [rate]
+      `update ${this.table} set rate = ? where id = ?`,
+      [rate, id]
     );
     return result.affectedRows;
   }
 
   async read(id) {
     const [row] = await this.database.query(
-      `select id, username, email, is_admin, rate, percentage_score from ${this.table} where id = ?`,
+      `select id, username, email, is_admin, rate, percentage_score, created_at from ${this.table} where id = ?`,
       [id]
     );
     return row[0];
@@ -47,14 +47,14 @@ class UserRepository extends AbstractRepository {
 
   async readAll() {
     const [rows] = await this.database.query(
-      `select id, username, email, is_admin, percentage_score, rate from ${this.table}`
+      `select id, username, email, is_admin, percentage_score, rate, created_at from ${this.table}`
     );
     return rows;
   }
 
   async readUserSuccessRate(userId) {
     const [row] = await this.database.query(
-      `select (sum(is_correct)/count(*)) * 100 as success_rate from user_results as r join user as u on r.user_id = u.id where u.id = ?`,
+      `select (sum(is_correct)/count(*)) * 100 as success_rate from user_results where user_id = ?`,
       [userId]
     );
     return row[0].success_rate;
@@ -68,10 +68,10 @@ class UserRepository extends AbstractRepository {
     return row[0];
   }
 
-  async updateUserScore(userId, percentage) {
+  async updateUserScore(userId, successRate) {
     await this.database.query(
       `update ${this.table} set percentage_score = ? where id = ?`,
-      [percentage, userId]
+      [successRate, userId]
     );
   }
 

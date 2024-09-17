@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import QuizCard from "../components/QuizCard";
-import Header from "../components/Header";
 import "../styles/quizList.css";
 
 export const loader = async () => {
@@ -44,32 +43,29 @@ function HomePage() {
     .filter((el) => (filterDiff ? el.difficulty === filterDiff : themes));
 
   return (
-    <>
-      <Header />
-      <div className="quiz-list-container">
-        <div className="select-part">
-          <select onChange={handleThemeChange} value={filterTheme}>
-            <option value="">THEME</option>
-            {extractUniqueTheme.map((theme) => (
-              <option key={theme.id}>{theme}</option>
-            ))}
-          </select>
-          <select onChange={handleDiffChange} value={filterDiff}>
-            <option value="">DIFFICULTE</option>
-            {extractUniqueDifficulty.map((difficulty) => (
-              <option key={difficulty.id}>{difficulty}</option>
-            ))}
-          </select>
-        </div>
-        <div className="quiz-card-container">
-          {filteredThemes.map((theme) => (
-            <div key={`${theme.theme}-${theme.difficulty}`} className="card">
-              <QuizCard theme={theme.theme} difficulty={theme.difficulty} />
-            </div>
+    <div className="quiz-list-container">
+      <div className="select-part">
+        <select onChange={handleThemeChange} value={filterTheme}>
+          <option value="">THEME</option>
+          {extractUniqueTheme.map((theme) => (
+            <option key={theme.id}>{theme}</option>
           ))}
-        </div>
+        </select>
+        <select onChange={handleDiffChange} value={filterDiff}>
+          <option value="">DIFFICULTE</option>
+          {extractUniqueDifficulty.map((difficulty) => (
+            <option key={difficulty.id}>{difficulty}</option>
+          ))}
+        </select>
       </div>
-    </>
+      <div className="quiz-card-container">
+        {filteredThemes.map((theme) => (
+          <div key={`${theme.theme}-${theme.difficulty}`} className="card">
+            <QuizCard theme={theme.theme} difficulty={theme.difficulty} />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 

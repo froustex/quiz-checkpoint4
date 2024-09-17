@@ -1,7 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  redirect,
+} from "react-router-dom";
 
 import App from "./App";
 import Register, { action as registerAction } from "./pages/Register";
@@ -12,8 +16,12 @@ import Landing from "./pages/Landing";
 import QuizTest, { loader as quizTestLoader } from "./pages/QuizTest";
 import QuizPage, { loader as quizPageLoader } from "./pages/QuizPage";
 import QuizList, { loader as quizListLoader } from "./pages/QuizList";
+import Dashboard from "./pages/Dashboard";
+import Users from "./pages/Users";
+import AddQuestionAdmin from "./pages/AddQuestionAdmin";
+import QuestionsList from "./pages/QuestionsList";
 
-/* const checkAuth = async () => {
+const checkAuth = async () => {
   try {
     const res = await fetch(
       `${import.meta.env.VITE_API_URL}/api/verify-admin`,
@@ -27,8 +35,8 @@ import QuizList, { loader as quizListLoader } from "./pages/QuizList";
     return false;
   }
 };
-*/
-/* function protectedRoute(routeConfig) {
+
+function protectedRoute(routeConfig) {
   return {
     ...routeConfig,
     loader: async (args) => {
@@ -45,7 +53,6 @@ import QuizList, { loader as quizListLoader } from "./pages/QuizList";
     },
   };
 }
-  */
 
 const router = createBrowserRouter([
   {
@@ -73,18 +80,37 @@ const router = createBrowserRouter([
         element: <QuizTest />,
         loader: quizTestLoader,
       },
+      {
+        path: "/quizlist",
+        element: <QuizList />,
+        loader: quizListLoader,
+      },
+      {
+        path: "/quiz/:theme/:difficulty",
+        loader: quizPageLoader,
+        element: <QuizPage />,
+      },
     ],
   },
-  {
-    path: "/quizlist",
-    element: <QuizList />,
-    loader: quizListLoader,
-  },
-  {
-    path: "/quiz/:theme/:difficulty",
-    loader: quizPageLoader,
-    element: <QuizPage />,
-  },
+  protectedRoute({
+    path: "/dashboard",
+    element: <Dashboard />,
+    errorElement: <Error />,
+    children: [
+      {
+        path: "",
+        element: <Users />,
+      },
+      {
+        path: "addquestion",
+        element: <AddQuestionAdmin />,
+      },
+      {
+        path: "questionlist",
+        element: <QuestionsList />,
+      },
+    ],
+  }),
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

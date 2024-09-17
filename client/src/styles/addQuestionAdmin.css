@@ -1,0 +1,25 @@
+.admin-question-form {
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  justify-content: space-around;
+  align-items: center;
+  margin: 5rem auto;
+  background-color: rgb(169, 158, 166);
+}
+
+input.intitule {
+  display: flex;
+  flex-direction: row;
+  max-width: 50vw;
+  height: 6rem;
+  text-align: center;
+}
+
+input {
+  display: flex;
+  height: 1.6rem;
+  width: 60%;
+  text-align: center;
+  background-color: rgb(204, 201, 204);
+}

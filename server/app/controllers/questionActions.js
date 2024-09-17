@@ -9,6 +9,15 @@ const browse = async (req, res, next) => {
   }
 };
 
+const browseAll = async (req, res, next) => {
+  try {
+    const questions = await tables.question.readAllQuestions();
+    res.json(questions);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const browseQuiz = async (req, res, next) => {
   const { theme, difficulty } = req.params;
   try {
@@ -41,4 +50,10 @@ const add = async (req, res, next) => {
   }
 };
 
-module.exports = { browse, browseQuiz, browseThemeAndDifficulty, add };
+module.exports = {
+  browse,
+  browseAll,
+  browseQuiz,
+  browseThemeAndDifficulty,
+  add,
+};

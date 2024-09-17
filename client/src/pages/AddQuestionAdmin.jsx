@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/addQuestion.css";
+import "../styles/addQuestionAdmin.css";
+import { useAuth } from "../services/useAuth";
 
-function AddQuestion({ auth }) {
+function AddQuestionAdmin() {
   const navigate = useNavigate();
-
+  const { auth } = useAuth();
   const [formData, setFormData] = useState({
     intitule: "",
     option1: "",
@@ -14,7 +15,7 @@ function AddQuestion({ auth }) {
     correctOption: "",
     difficulty: "",
     theme: "",
-    isValid: false,
+    isValid: true,
   });
 
   const handleChange = (e) => {
@@ -41,10 +42,7 @@ function AddQuestion({ auth }) {
       );
       const result = await response.json();
       if (response.ok) {
-        console.info(
-          "Question créee en attente de validation",
-          result.insertId
-        );
+        console.info("Question créee", result.insertId);
         setFormData(formData);
         navigate(0);
       } else {
@@ -59,8 +57,8 @@ function AddQuestion({ auth }) {
   };
 
   return (
-    auth && (
-      <form className="add-question-form" onSubmit={handleSubmit}>
+    auth.isAdmin && (
+      <form className="admin-question-form" onSubmit={handleSubmit}>
         <input
           className="intitule"
           type="text"
@@ -132,4 +130,4 @@ function AddQuestion({ auth }) {
   );
 }
 
-export default AddQuestion;
+export default AddQuestionAdmin;

@@ -4,6 +4,7 @@ const router = express.Router();
 
 const {
   browse,
+  browseAll,
   browseQuiz,
   browseThemeAndDifficulty,
   add,
@@ -12,6 +13,8 @@ const {
 const { verifyToken } = require("../../../services/auth");
 
 router.get("/test", browse);
+
+router.get("/", browseAll);
 
 router.get("/:theme/:difficulty", verifyToken, browseQuiz);
 

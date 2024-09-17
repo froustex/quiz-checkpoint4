@@ -23,6 +23,11 @@ class QuestionRepository extends AbstractRepository {
     return result.insertId;
   }
 
+  async readAllQuestions() {
+    const [rows] = await this.database.query(`select * from question `);
+    return rows;
+  }
+
   async getQuestionsTest() {
     const [rows] = await this.database.query(`select * from question limit 10`);
     return rows;
