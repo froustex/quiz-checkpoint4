@@ -10,6 +10,7 @@ const {
   addRate,
   destroy,
   readSuccess,
+  readTotalAnswer,
 } = require("../../../controllers/userActions");
 
 const { hashPassword } = require("../../../services/auth");
@@ -18,6 +19,10 @@ const { verifyToken, verifyAdmin } = require("../../../services/auth");
 router.get("/", verifyToken, verifyAdmin, browse);
 
 router.get("/:id", verifyToken, read);
+
+router.get("/:id/successRate", verifyToken, readSuccess);
+
+router.get("/:userId/answers", readTotalAnswer);
 
 router.post("/", hashPassword, add);
 

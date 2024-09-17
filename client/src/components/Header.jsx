@@ -38,14 +38,20 @@ function Header() {
 
   const handleShowModalResults = () => {
     setShowModalResults(!showModalResults);
+    setShowModalAddQuestion(false);
+    setShowModalRate(false);
   };
 
   const handleShowModalAddQuestion = () => {
     setShowModalAddQuestion(!showModalAddQuestion);
+    setShowModalRate(false);
+    setShowModalResults(false);
   };
 
   const handleShowModalRate = () => {
     setShowModalRate(!showModalRate);
+    setShowModalAddQuestion(false);
+    setShowModalResults(false);
   };
 
   return (

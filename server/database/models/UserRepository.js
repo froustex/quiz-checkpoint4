@@ -31,32 +31,10 @@ class UserRepository extends AbstractRepository {
 
   async read(id) {
     const [row] = await this.database.query(
-      `select id, username, email, is_admin, rate from ${this.table} where id = ?`,
+      `select id, username, email, is_admin, rate, percentage_score from ${this.table} where id = ?`,
       [id]
     );
     return row[0];
-  }
-
-  async readAll() {
-    const [rows] = await this.database.query(
-      `select id, username, email, is_admin from ${this.table}`
-    );
-    return rows;
-  }
-
-  async readUserSuccessRate(userId) {
-    const [row] = await this.database.query(
-      `select (sum(is_correct) / count(*)) * 100 as success_rate from user_results where user_id = ?`,
-      [userId]
-    );
-    return row[0].success_rate;
-  }
-
-  async updateUserScore(userId, percentage) {
-    await this.database.query(
-      `update ${this.table} set percentage_score = ? where id = ?`,
-      [percentage, userId]
-    );
   }
 
   async readByEmail(email) {
@@ -67,12 +45,34 @@ class UserRepository extends AbstractRepository {
     return row[0];
   }
 
-  async updateUserScore(userId, percentage) {
+  async readAll() {
+    const [rows] = await this.database.query(
+      `select id, username, email, is_admin, percentage_score, rate from ${this.table}`
+    );
+    return rows;
+  }
+
+  async readUserSuccessRate(userId) {
     const [row] = await this.database.query(
-      `update user set pecentage_score = ? where id = ?`,
-      [percentage, userId]
+      `select (sum(is_correct)/count(*)) * 100 as success_rate from user_results as r join user as u on r.user_id = u.id where u.id = ?`,
+      [userId]
+    );
+    return row[0].success_rate;
+  }
+
+  async readUserTotalAnswer(userId) {
+    const [row] = await this.database.query(
+      `select sum(is_correct) as correct_sum, count(*) as total_count from user_results as r join user as u on r.user_id = u.id where u.id = ?`,
+      [userId]
     );
     return row[0];
+  }
+
+  async updateUserScore(userId, percentage) {
+    await this.database.query(
+      `update ${this.table} set percentage_score = ? where id = ?`,
+      [percentage, userId]
+    );
   }
 
   async delete(id) {

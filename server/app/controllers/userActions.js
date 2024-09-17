@@ -24,12 +24,20 @@ const read = async (req, res, next) => {
 };
 
 const readSuccess = async (req, res, next) => {
-  const userId = req.body;
+  const { userId } = req.params;
   try {
     const successRate = await tables.user.readUserSuccessRate(userId);
-    console.log(successRate);
-    await tables.user.updateUserScore(successRate, userId);
     res.json({ successRate });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const readTotalAnswer = async (req, res, next) => {
+  const { userId } = req.params;
+  try {
+    const result = await tables.user.readUserTotalAnswer(userId);
+    res.json(result);
   } catch (err) {
     next(err);
   }
@@ -94,6 +102,7 @@ module.exports = {
   browse,
   read,
   readSuccess,
+  readTotalAnswer,
   add,
   addUserResult,
   addRate,

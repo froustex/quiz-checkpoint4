@@ -9,23 +9,26 @@ function Rate({ stars }) {
   const [rate, setRate] = useState(rating);
   const [hover, setHover] = useState(0);
 
-  async function refreshRate() {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/users/${auth.id}`,
-        { credentials: "include" }
-      );
-      const newRate = await response.json();
+  useEffect(() => {
+    const refreshRate = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/users/${auth.id}`,
+          { credentials: "include" }
+        );
+        const newRate = await response.json();
 
-      if (!response.ok) {
-        throw new Error("Erreur lors du chargement de votre note");
-      } else {
-        return setRate(newRate.rate);
+        if (!response.ok) {
+          throw new Error("Erreur lors du chargement de votre note");
+        } else {
+          return setRate(newRate.rate);
+        }
+      } catch (err) {
+        throw new Error(err);
       }
-    } catch (err) {
-      throw new Error(err);
-    }
-  }
+    };
+    refreshRate();
+  }, [rate]);
 
   async function handleClick(e, getCurrentIndex) {
     e.preventDefault();
@@ -51,7 +54,6 @@ function Rate({ stars }) {
       console.error(err);
     }
   }
-  refreshRate();
 
   function handleMouseEnter(getCurrentIndex) {
     setHover(getCurrentIndex);
@@ -60,8 +62,6 @@ function Rate({ stars }) {
   function handleMouseLeave() {
     setHover(rate);
   }
-
-  useEffect(() => {}, [rate]);
 
   return (
     auth && (

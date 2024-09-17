@@ -31,4 +31,14 @@ const browseThemeAndDifficulty = async (req, res, next) => {
   }
 };
 
-module.exports = { browse, browseQuiz, browseThemeAndDifficulty };
+const add = async (req, res, next) => {
+  try {
+    const question = req.body;
+    const insertId = await tables.question.create(question);
+    res.json({ insertId });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { browse, browseQuiz, browseThemeAndDifficulty, add };

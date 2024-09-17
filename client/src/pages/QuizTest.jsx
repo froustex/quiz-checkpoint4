@@ -1,10 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import "../styles/quizz.css";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 
 import timerSound from "../assets/sounds/timer.mp3";
 import correctSound from "../assets/sounds/correct.wav";
 import wrongSound from "../assets/sounds/wrong.wav";
+
+import correctScore from "../assets/images/correctScore.jpg";
+import lowScore from "../assets/images/lowScore.jpg";
+import perfectScore from "../assets/images/perfectScore.jpg";
 
 export const loader = async () => {
   try {
@@ -29,7 +33,7 @@ function QuizTest() {
   const [score, setScore] = useState(0);
   const [timer, setTimer] = useState(10);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const navigate = useNavigate();
 
   const timerAudioRef = useRef(new Audio(timerSound));
   const correctAudioRef = useRef(new Audio(correctSound));
@@ -49,31 +53,57 @@ function QuizTest() {
     return handleEndTimer();
   }, [timer]);
 
-  const handleAnswer = (option) => {
+  const handleAnswer = async (option) => {
     setTimer(0);
-    setSelectedOption(option);
-    const correct = questions[currentQuestion].correct_option;
-    if (option === correct) {
+    const isAnswerCorrect =
+      option === questions[currentQuestion].correct_option;
+
+    if (isAnswerCorrect) {
       setScore(score + 1);
       correctAudioRef.current.play();
-      timerAudioRef.current.pause();
-      wrongAudioRef.current.pause();
     } else {
       wrongAudioRef.current.play();
-      timerAudioRef.current.pause();
-      correctAudioRef.current.pause();
     }
+    timerAudioRef.current.pause();
+
     setShowAnswer(true);
   };
 
   const handleNext = () => {
     if (currentQuestion < questions.length) {
       setShowAnswer(false);
-      setSelectedOption(null);
       setCurrentQuestion(currentQuestion + 1);
       setTimer(10);
     }
     return timerAudioRef.current.pause();
+  };
+
+  const messageScore = () => {
+    timerAudioRef.current.pause();
+    if (score <= 5) {
+      return "Beaucoup de choses sont à revoir...Il est grand temps de retourner à tes révisions!";
+    }
+    if (score >= 6 && score <= 9) {
+      return "Quelques erreurs mais tu es sur la bonne voie. Encore quelques efforts et tu seras incollable";
+    }
+    if (score === 10) {
+      return "Un sans-faute, félicitations...mais ce n'est pas non plus la peine de trop se la raconter, ne te relache pas si tu veux rester au sommet";
+    }
+    return null;
+  };
+
+  const getScoreImage = () => {
+    timerAudioRef.current.pause();
+    if (score <= 5) {
+      return lowScore;
+    }
+    if (score >= 6 && score <= 9) {
+      return correctScore;
+    }
+    if (score === 10) {
+      return perfectScore;
+    }
+    return null;
   };
 
   if (!questions.length) return <p>chargement...</p>;
@@ -175,15 +205,31 @@ function QuizTest() {
           </button>
         </div>
       ) : (
-        <div>
-          <h2>Quiz terminé !</h2>
-          <p>
-            Votre score : {score}/{questions.length}
-          </p>
+        <div className="score-container">
+          <div className="score-img-container">
+            <img
+              className="score-img"
+              src={getScoreImage()}
+              alt="illustration en fonction du score"
+            />
+            <h2 style={{ textAlign: "center", padding: "2rem" }}>
+              Quiz terminé !
+            </h2>
+            <p style={{ textAlign: "center", fontSize: "2rem" }}>
+              Votre score : {score}/{questions.length}
+            </p>
+            <p style={{ textAlign: "center", fontSize: "1.8rem" }}>
+              {messageScore()}
+            </p>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <button type="button" onClick={() => navigate("/landing")}>
+                Retour aux quiz
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
   );
 }
-
 export default QuizTest;
